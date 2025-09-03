@@ -1,0 +1,42 @@
+modLoader="javafml"
+
+loaderVersion="[36,)"
+
+license="All rights reserved"
+
+[[mods]]
+itemIcon="minecraft:spawner"
+
+configBackground="minecraft:textures/block/stone.png"
+
+modId="random_dungeon_spawners"
+
+version="1.0.0"
+
+displayName="Random Dungeon Spawners"
+
+displayURL="https://www.curseforge.com/minecraft/mc-mods/random-dungeon-spawners"
+
+logoFile="random_dungeon_spawners_logo.gif"
+
+credits="All credit goes to DevMaster1015 aka RedRoseWarrior1"
+
+authors=["RedRoseWarrior1 aka DevMaster1015"]
+
+description='''Randomnizes vanilla dungeon spawners'''
+
+# Base Forge
+[[dependencies.random_dungeon_spawners]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+
+# Base Minecraft
+[[dependencies.random_dungeon_spawners]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17]"
+    ordering="NONE"
+    side="BOTH"
