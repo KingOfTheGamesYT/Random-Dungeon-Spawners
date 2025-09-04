@@ -29,7 +29,7 @@ description='''Randomnizes vanilla dungeon spawners'''
 [[dependencies.random_dungeon_spawners]]
     modId="forge"
     mandatory=true
-    versionRange="[36,)"
+    versionRange="[47,)"
     ordering="NONE"
     side="BOTH"
 
@@ -37,6 +37,6 @@ description='''Randomnizes vanilla dungeon spawners'''
 [[dependencies.random_dungeon_spawners]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5,1.17]"
+    versionRange="[1.20.1,1.21]"
     ordering="NONE"
     side="BOTH"

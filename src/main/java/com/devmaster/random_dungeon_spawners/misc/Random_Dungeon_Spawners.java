@@ -2,7 +2,8 @@ package com.devmaster.random_dungeon_spawners.misc;
 
 import com.devmaster.random_dungeon_spawners.config.BlacklistConfig;
 
-import net.minecraft.entity.EntityType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.EntityType;
 
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,19 +37,19 @@ public class Random_Dungeon_Spawners {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BlacklistConfig.COMMON_CONFIG, "random_dungeon_spawners-config.toml");
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
+    private void setup(FMLCommonSetupEvent event) {
         DungeonHooks.removeDungeonMob(EntityType.ZOMBIE);
         DungeonHooks.removeDungeonMob(EntityType.SKELETON);
         DungeonHooks.removeDungeonMob(EntityType.SPIDER);
 
         List<String> blacklist = (List<String>) BlacklistConfig.ENTITY_BLACKLIST.get();
 
-        List<EntityType<?>> validMobs = ForgeRegistries.ENTITIES.getValues().stream()
+        List<EntityType<?>> validMobs = ForgeRegistries.ENTITY_TYPES.getValues().stream()
                 .filter(type -> {
-                    if (type == null || type.getClassification() == null || type.getRegistryName() == null) return false;
-                    if (type.getClassification().getPeacefulCreature()) return false;
+                    if (type == null || type.getCategory() == null || BuiltInRegistries.ENTITY_TYPE.getKey(type) == null) return false;
+                    if (type.getCategory().isFriendly()) return false;
 
-                    String id = type.getRegistryName().toString();
+                    String id = BuiltInRegistries.ENTITY_TYPE.getKey(type).toString();
                     if (blacklist.contains(id)) {
                         System.out.println("[DungeonSpawner] Skipping blacklisted mob: " + id);
                         return false;
@@ -64,6 +65,7 @@ public class Random_Dungeon_Spawners {
             DungeonHooks.addDungeonMob(type, 100); // Equal weight
         }
     }
+
     private void doClientStuff(final FMLClientSetupEvent event) {
     }
 }
