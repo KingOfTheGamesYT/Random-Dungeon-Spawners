@@ -5,9 +5,9 @@ loaderVersion="[36,)"
 license="All rights reserved"
 
 [[mods]]
-itemIcon="minecraft:spawner"
+itemIcon="minecraft:stick"
 
-configBackground="minecraft:textures/block/stone.png"
+configBackground="minecraft:textures/block/spawner.png"
 
 modId="random_dungeon_spawners"
 

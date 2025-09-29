@@ -21,7 +21,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Mod("random_dungeon_spawners")
 public class Random_Dungeon_Spawners {
     public static final Logger LOGGER = LogManager.getLogger("Random Dungeon Spawners");
