@@ -22,7 +22,13 @@ public class BlacklistConfig {
                 Arrays.asList(
                         "minecraft:wither",
                         "minecraft:ender_dragon",
-                        "minecraft:elder_guardian"
+                        "minecraft:elder_guardian",
+                        "minecraft:slime",
+                        "minecraft:zombified_piglin",
+                        "minecraft:giant",
+                        "draconicevolution:guardian_wither",
+                        "draconicevolution:draconic_guardian"
+
                 ),
                 obj -> {
                     if (!(obj instanceof String)) return false;
