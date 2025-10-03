@@ -11,6 +11,8 @@ import java.util.List;
 public class BlacklistConfig {
     public static ForgeConfigSpec COMMON_CONFIG;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> ENTITY_BLACKLIST;
+    public static ForgeConfigSpec.BooleanValue RANDOMIZE_ALL_SPAWNERS;
+
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -43,6 +45,10 @@ public class BlacklistConfig {
                     return id != null && ForgeRegistries.ENTITY_TYPES.containsKey(id);
                 }
         );
+
+        RANDOMIZE_ALL_SPAWNERS = builder.comment(
+                "If true, any mob spawner placed in the world (by players) will be randomized"
+        ).define("randomizeAllSpawners", true);
 
         builder.pop();
         COMMON_CONFIG = builder.build();
