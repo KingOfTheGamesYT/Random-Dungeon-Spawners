@@ -27,7 +27,14 @@ public class BlacklistConfig {
                         "minecraft:zombified_piglin",
                         "minecraft:giant",
                         "draconicevolution:guardian_wither",
-                        "draconicevolution:draconic_guardian"
+                        "draconicevolution:draconic_guardian",
+                        "aquamirae:maze_mother",
+                        "blue_skies:seclam",
+                        "cataclysm:deepling_warlock",
+                        "deeperdarker:shriek_worm",
+                        "mowziesmobs:grottol",
+                        "iceandfire:dread_horse",
+                        "alexmobs:bone_serpent_part"
 
                 ),
                 obj -> {
