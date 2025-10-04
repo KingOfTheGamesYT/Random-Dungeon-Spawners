@@ -1,0 +1,15 @@
+[
+  {
+    "modid": "random_dungeon_spawners",
+    "name": "Random Dungeon Spawners",
+    "description": "Randomnizes vanilla dungeon spawners",
+    "version": "1.0.0",
+    "mcversion": "1.12.2",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/random-dungeon-spawners",
+    "authorList": ["Devmaster1015 aka RedRosewarrior1"],
+    "credits": "RedRoseWarrior1",
+    "logoFile": "random_dungeon_spawners_logo.gif",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
