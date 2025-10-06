@@ -1,56 +1,58 @@
 package com.devmaster.random_dungeon_spawners.config;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.config.Configuration;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.registries.ForgeRegistries;
-
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class BlacklistConfig {
-    public static ForgeConfigSpec COMMON_CONFIG;
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> ENTITY_BLACKLIST;
-    public static ForgeConfigSpec.BooleanValue RANDOMIZE_ALL_SPAWNERS;
 
+    private static Configuration config;
+    public static List<String> ENTITY_BLACKLIST = new ArrayList<>();
+    public static boolean RANDOMIZE_ALL_SPAWNERS = true;
 
-    static {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+    public static void init(File configFile) {
+        config = new Configuration(configFile);
+        syncConfig();
+    }
 
-        builder.push("DungeonSpawnerBlacklist");
+    public static void syncConfig() {
+        String[] defaultBlacklist = new String[] {
+                "minecraft:wither",
+                "minecraft:ender_dragon",
+                "minecraft:elder_guardian",
+                "minecraft:slime",
+                "minecraft:zombie_pigman",
+                "minecraft:giant",
+                "draconicevolution:guardian_wither",
+                "draconicevolution:draconic_guardian",
+                "aquamirae:maze_mother",
+                "blue_skies:seclam",
+                "cataclysm:deepling_warlock",
+                "deeperdarker:shriek_worm",
+                "mowziesmobs:grottol",
+                "iceandfire:dread_horse",
+                "alexmobs:bone_serpent_part"
+        };
 
-        ENTITY_BLACKLIST = builder.defineList(
+        ENTITY_BLACKLIST = Arrays.asList(config.getStringList(
                 "blacklistedEntities",
-                Arrays.asList(
-                        "minecraft:wither",
-                        "minecraft:ender_dragon",
-                        "minecraft:elder_guardian",
-                        "minecraft:slime",
-                        "minecraft:zombified_piglin",
-                        "minecraft:giant",
-                        "draconicevolution:guardian_wither",
-                        "draconicevolution:draconic_guardian",
-                        "aquamirae:maze_mother",
-                        "blue_skies:seclam",
-                        "cataclysm:deepling_warlock",
-                        "deeperdarker:shriek_worm",
-                        "mowziesmobs:grottol",
-                        "iceandfire:dread_horse",
-                        "alexmobs:bone_serpent_part"
+                "DungeonSpawnerBlacklist",
+                defaultBlacklist,
+                "List of entity IDs to exclude from dungeon spawners"
+        ));
 
-                ),
-                obj -> {
-                    if (!(obj instanceof String)) return false;
-                    ResourceLocation id = ResourceLocation.tryParse((String) obj);
-                    return id != null && ForgeRegistries.ENTITY_TYPES.containsKey(id);
-                }
+        RANDOMIZE_ALL_SPAWNERS = config.getBoolean(
+                "randomizeAllSpawners",
+                "DungeonSpawnerBlacklist",
+                true,
+                "If true, any mob spawner placed in the world (by players) will be randomized"
         );
 
-        RANDOMIZE_ALL_SPAWNERS = builder.comment(
-                "If true, any mob spawner placed in the world (by players) will be randomized"
-        ).define("randomizeAllSpawners", true);
-
-        builder.pop();
-        COMMON_CONFIG = builder.build();
+        if (config.hasChanged()) {
+            config.save();
+        }
     }
 }
