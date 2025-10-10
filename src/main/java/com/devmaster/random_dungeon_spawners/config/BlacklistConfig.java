@@ -10,8 +10,7 @@ import java.util.List;
 public class BlacklistConfig {
 
     private static Configuration config;
-    public static List<String> ENTITY_BLACKLIST = new ArrayList<>();
-    public static boolean RANDOMIZE_ALL_SPAWNERS = true;
+    public static List<String> ENTITY_BLACKLIST = new ArrayList<String>();
 
     public static void init(File configFile) {
         config = new Configuration(configFile);
@@ -19,22 +18,20 @@ public class BlacklistConfig {
     }
 
     public static void syncConfig() {
+        // Default blacklist for Minecraft 1.7.10 + Draconic Evolution
         String[] defaultBlacklist = new String[] {
-                "minecraft:wither",
-                "minecraft:ender_dragon",
-                "minecraft:elder_guardian",
-                "minecraft:slime",
-                "minecraft:zombie_pigman",
-                "minecraft:giant",
-                "draconicevolution:guardian_wither",
-                "draconicevolution:draconic_guardian",
-                "aquamirae:maze_mother",
-                "blue_skies:seclam",
-                "cataclysm:deepling_warlock",
-                "deeperdarker:shriek_worm",
-                "mowziesmobs:grottol",
-                "iceandfire:dread_horse",
-                "alexmobs:bone_serpent_part"
+                // Vanilla bosses
+                "WitherBoss",
+                "EnderDragon",
+                "Giant",
+
+                // Draconic Evolution bosses (1.7.10 entity IDs)
+                "DraconicEvolution.GuardianWither",
+                "DraconicEvolution.ChaosGuardian",
+
+                // Optional: remove passive or special mobs you don't want
+                "Slime",
+                "PigZombie"
         };
 
         ENTITY_BLACKLIST = Arrays.asList(config.getStringList(
@@ -43,13 +40,6 @@ public class BlacklistConfig {
                 defaultBlacklist,
                 "List of entity IDs to exclude from dungeon spawners"
         ));
-
-        RANDOMIZE_ALL_SPAWNERS = config.getBoolean(
-                "randomizeAllSpawners",
-                "DungeonSpawnerBlacklist",
-                true,
-                "If true, any mob spawner placed in the world (by players) will be randomized"
-        );
 
         if (config.hasChanged()) {
             config.save();
