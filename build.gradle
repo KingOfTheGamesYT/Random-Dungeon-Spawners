@@ -4,8 +4,8 @@ buildscript {
         maven {
             name = "forge"
             url = "https://maven.minecraftforge.net/"
-
         }
+
         maven {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
@@ -20,8 +20,8 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0.0-1.7.10"
-group= "com.devmaster.random_dungeon_spawners" // https://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "1.0.1-1.7.10"
+group= "com.devmaster.random_dungeon_spawners"
 archivesBaseName = "random_dungeon_spawners"
 
 minecraft {
@@ -30,7 +30,6 @@ minecraft {
 }
 
 dependencies {
-
 }
 
 processResources

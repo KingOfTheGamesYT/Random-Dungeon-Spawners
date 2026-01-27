@@ -24,7 +24,6 @@ public class Random_Dungeon_Spawners {
     public static final String VERSION = "1.0";
     private static List<String> validMobs = new ArrayList<String>();
 
-
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         File configFile = new File(event.getModConfigurationDirectory(), MODID + ".cfg");
@@ -41,6 +40,8 @@ public class Random_Dungeon_Spawners {
 
         validMobs.clear();
 
+        System.out.println("[RandomDungeonSpawners] Filter mode: " + BlacklistConfig.FILTER_MODE);
+
         for (Object keyObj : EntityList.stringToClassMapping.keySet()) {
             String id = (String) keyObj;
             Class<?> entityClass = (Class<?>) EntityList.stringToClassMapping.get(id);
@@ -48,8 +49,8 @@ public class Random_Dungeon_Spawners {
             if (entityClass == null) continue;
             if (!EntityMob.class.isAssignableFrom(entityClass)) continue;
 
-            if (BlacklistConfig.ENTITY_BLACKLIST.contains(id)) {
-                System.out.println("[DungeonSpawner] Skipping blacklisted mob: " + id);
+            if (!BlacklistConfig.isEntityAllowed(id)) {
+                System.out.println("[RandomDungeonSpawners] Skipping filtered mob: " + id);
                 continue;
             }
 
