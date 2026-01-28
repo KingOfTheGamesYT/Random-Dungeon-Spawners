@@ -1,20 +1,21 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
+        maven { url = "https://files.minecraftforge.net/maven" }
         mavenCentral()
     }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
-    }
+    dependencies
+            {
+                classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+            }
 }
 
-apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'net.minecraftforge.gradle.forge'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.0.0-1.12.2'
+version = '1.0.1-1.12.2'
 group = 'com.devmaster.random_dungeon_spawners'
 archivesBaseName = 'random_dungeon_spawners'
 
@@ -22,33 +23,13 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 minecraft {
 
-    mappings channel: 'snapshot', version: '20171003-1.12'
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-        }
-
-        server {
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-        }
-    }
+    version = "${minecraft_version}-${forge_version}"
+    mappings = minecraft_mappings
+    makeObfSourceJar = false
+    runDir = "run"
 }
 
 dependencies {
-
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
 
 }
 
@@ -79,5 +60,4 @@ publishing {
             url "file:///${project.projectDir}/mcmodsrepo"
         }
     }
-
 }

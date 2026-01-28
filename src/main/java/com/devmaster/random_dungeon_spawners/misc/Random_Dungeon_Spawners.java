@@ -17,7 +17,6 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class Random_Dungeon_Spawners {
 
     public static final String MODID = "random_dungeon_spawners";
     public static final String NAME = "Random Dungeon Spawners";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.0.1";
 
     private static List<String> validMobs = new ArrayList<>();
 
@@ -61,14 +60,14 @@ public class Random_Dungeon_Spawners {
                 continue;
             }
 
-            if (BlacklistConfig.ENTITY_BLACKLIST.contains(id)) {
-                System.out.println("[DungeonSpawner] Skipping blacklisted mob: " + id);
+            if (!BlacklistConfig.isEntityAllowed(id)) {
+                System.out.println("[RandomDungeonSpawners] Skipping filtered mob: " + id);
                 continue;
             }
 
+
             validMobs.add(id);
         }
-
 
         System.out.println("[RandomDungeonSpawners] Adding " + validMobs.size() + " mobs to dungeon list");
 
@@ -77,7 +76,7 @@ public class Random_Dungeon_Spawners {
         }
     }
 
-  /*  @SubscribeEvent
+    @SubscribeEvent
     public void onBlockPlaced(BlockEvent.PlaceEvent event) {
         if (!BlacklistConfig.RANDOMIZE_ALL_SPAWNERS) return;
 
@@ -98,5 +97,5 @@ public class Random_Dungeon_Spawners {
                 }
             }
         }
-    }*/
+    }
 }
