@@ -11,7 +11,7 @@ configBackground="minecraft:textures/block/spawner.png"
 
 modId="random_dungeon_spawners"
 
-version="1.0.0"
+version="1.0.1"
 
 displayName="Random Dungeon Spawners"
 

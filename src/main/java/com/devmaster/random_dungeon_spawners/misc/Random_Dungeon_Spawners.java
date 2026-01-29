@@ -2,11 +2,18 @@ package com.devmaster.random_dungeon_spawners.misc;
 
 import com.devmaster.random_dungeon_spawners.config.BlacklistConfig;
 
+import net.minecraft.block.SpawnerBlock;
 import net.minecraft.entity.EntityType;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -18,13 +25,16 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mod("random_dungeon_spawners")
 public class Random_Dungeon_Spawners {
-    public static final Logger LOGGER = LogManager.getLogger("Random Dungeon Spawners");
+
     public static final String MOD_ID = "random_dungeon_spawners";
+    public static final Logger LOGGER = LogManager.getLogger();
+
+    private static final List<EntityType<?>> VALID_MOBS = new ArrayList<>();
 
     public Random_Dungeon_Spawners() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
@@ -36,33 +46,56 @@ public class Random_Dungeon_Spawners {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        DungeonHooks.removeDungeonMob(EntityType.ZOMBIE);
-        DungeonHooks.removeDungeonMob(EntityType.SKELETON);
-        DungeonHooks.removeDungeonMob(EntityType.SPIDER);
+        event.enqueueWork(() -> {
 
-        List<String> blacklist = (List<String>) BlacklistConfig.ENTITY_BLACKLIST.get();
+            // Remove vanilla mobs
+            DungeonHooks.removeDungeonMob(EntityType.ZOMBIE);
+            DungeonHooks.removeDungeonMob(EntityType.SKELETON);
+            DungeonHooks.removeDungeonMob(EntityType.SPIDER);
 
-        List<EntityType<?>> validMobs = ForgeRegistries.ENTITIES.getValues().stream()
-                .filter(type -> {
-                    if (type == null || type.getClassification() == null || type.getRegistryName() == null) return false;
-                    if (type.getClassification().getPeacefulCreature()) return false;
+            VALID_MOBS.clear();
 
-                    String id = type.getRegistryName().toString();
-                    if (blacklist.contains(id)) {
-                        System.out.println("[DungeonSpawner] Skipping blacklisted mob: " + id);
-                        return false;
-                    }
+            for (EntityType<?> type : ForgeRegistries.ENTITIES.getValues()) {
+                if (type == null || type.getClassification() == null) continue;
 
-                    return true;
-                })
-                .collect(Collectors.toList());
+                // Hostile mobs only
+                if (type.getClassification().getPeacefulCreature()) continue;
 
-        System.out.println("[RandomDungeonSpawners] Adding " + validMobs.size() + " mobs to dungeon list");
+                ResourceLocation id = type.getRegistryName();
+                if (id == null) continue;
 
-        for (EntityType<?> type : validMobs) {
-            DungeonHooks.addDungeonMob(type, 100); // Equal weight
+                if (!BlacklistConfig.isEntityAllowed(id.toString())) {
+                    LOGGER.debug("Skipping filtered mob: {}", id);
+                    continue;
+                }
+
+                VALID_MOBS.add(type);
+            }
+
+            LOGGER.info("Adding {} mobs to dungeon spawner pool", VALID_MOBS.size());
+
+            for (EntityType<?> type : VALID_MOBS) {
+                DungeonHooks.addDungeonMob(type, 100);
+            }
+        });
+    }
+
+    @SubscribeEvent
+    public void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
+        if (!BlacklistConfig.RANDOMIZE_ALL_SPAWNERS.get()) return;
+        if (!(event.getPlacedBlock().getBlock() instanceof SpawnerBlock)) return;
+
+        World world = event.getWorld() instanceof World ? (World) event.getWorld() : null;
+        if (world == null || VALID_MOBS.isEmpty()) return;
+
+        TileEntity tile = world.getTileEntity(event.getPos());
+        if (tile instanceof MobSpawnerTileEntity) {
+            MobSpawnerTileEntity spawner = (MobSpawnerTileEntity) tile;
+            EntityType<?> randomMob = VALID_MOBS.get(world.rand.nextInt(VALID_MOBS.size()));
+            spawner.getSpawnerBaseLogic().setEntityType(randomMob);
         }
     }
+
     private void doClientStuff(final FMLClientSetupEvent event) {
     }
 }

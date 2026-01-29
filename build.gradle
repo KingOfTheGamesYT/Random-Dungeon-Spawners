@@ -17,7 +17,7 @@ apply plugin: 'maven-publish'
 
 
 // ---- MOD METADATA ----
-version = '1.0.0'
+version = '1.0.1'
 group = 'com.devmaster.random_dungeon_spawners'
 archivesBaseName = 'random_dungeon_spawners'
 
@@ -75,9 +75,6 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
-
-    //project name, project id, file id
-    implementation fg.deobf("curse.maven:jei-238222:3189632")
 }
 
 // ---- JAR MANIFEST ----
