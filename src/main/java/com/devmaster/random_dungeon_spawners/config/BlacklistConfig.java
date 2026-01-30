@@ -35,12 +35,21 @@ public class BlacklistConfig {
         ENTITY_BLACKLIST = builder.defineList(
                 "blacklistedEntities",
                 Arrays.asList(
-                        "minecraft:ender_dragon",
                         "minecraft:wither",
+                        "minecraft:ender_dragon",
                         "minecraft:elder_guardian",
                         "minecraft:slime",
+                        "minecraft:zombified_piglin",
                         "minecraft:giant",
-                        "minecraft:zombified_piglin"
+                        "draconicevolution:guardian_wither",
+                        "draconicevolution:draconic_guardian",
+                        "aquamirae:maze_mother",
+                        "blue_skies:seclam",
+                        "cataclysm:deepling_warlock",
+                        "deeperdarker:shriek_worm",
+                        "mowziesmobs:grottol",
+                        "iceandfire:dread_horse",
+                        "alexmobs:bone_serpent_part"
                 ),
                 o -> o instanceof String && isValidEntity((String) o)
         );
@@ -55,10 +64,9 @@ public class BlacklistConfig {
                 o -> o instanceof String && isValidEntity((String) o)
         );
 
-        RANDOMIZE_ALL_SPAWNERS = builder.define(
-                "randomizeAllSpawners",
-                true
-        );
+        RANDOMIZE_ALL_SPAWNERS = builder.comment(
+                "If true, any mob spawner placed in the world (by players) will be randomized"
+        ).define("randomizeAllSpawners", true);
 
         builder.pop();
         COMMON_CONFIG = builder.build();
