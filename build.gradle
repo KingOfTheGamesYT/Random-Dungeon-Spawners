@@ -5,45 +5,65 @@ buildscript {
             name = "forge"
             url = "https://maven.minecraftforge.net/"
         }
-
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
     dependencies {
         classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.1.+') {
-          changing = true
-    }
+            changing = true
+        }
     }
 }
 
-apply plugin: 'forge'
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
 
-version = "1.0.1-1.7.10"
+apply plugin: 'forge'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+version = "1.0.2-1.7.10"
 group= "com.devmaster.random_dungeon_spawners"
 archivesBaseName = "random_dungeon_spawners"
 
 minecraft {
     version = "1.7.10-10.13.4.1614-1.7.10"
-    runDir = "eclipse"
+    runDir = "run"
 }
 
-dependencies {
+repositories {
+    mavenCentral()
+    maven { url 'https://www.cursemaven.com'}
 }
+    dependencies {
+        compileOnly ("curse.maven:nether-dungeons-74770:777338")
+    }
 
-processResources
-{
+
+processResources {
+    // This will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
+    // Replace values in only mcmod.info.
+    filesMatching('mcmod.info') {
+        // Replace version and mcversion.
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+}
+
+// Ensures that the encoding of source files is set to UTF-8, see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+// This task creates a .jar file containing the source code of this mod.
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = "sources"
+    from sourceSets.main.allSource
+}
+
+// Creates the listed artifacts on building the mod.
+artifacts {
+    archives sourcesJar
 }
